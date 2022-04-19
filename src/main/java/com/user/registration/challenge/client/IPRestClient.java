@@ -1,7 +1,6 @@
 package com.user.registration.challenge.client;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.user.registration.challenge.client.model.IPApiResponse;
 import com.user.registration.challenge.error.InvalidIPAddressException;
 import com.user.registration.challenge.error.IpAPIException;
@@ -20,11 +19,11 @@ public class IPRestClient {
     @Autowired
     private RestTemplate ipApiRestTemplate;
 
-    private static final String GET_IP = "/json/{ipAddress}?fields=status,query,countryCode,city";
+    private static final String GET_IP = "/json/{ipAddress}?fields=status,query,country,countryCode,city";
     private static final String RESPONSE_FAILED = "fail";
     private static final String RESPONSE_SUCCESS = "success";
     private static final String INVALID_IP_MSG = "Couldn't find the given ip: {0} ";
-    private static final String UNKOWN_STATUS_MSG = "Api returned an unknown status response message while trying to get {0}";
+    private static final String UNKNOWN_STATUS_RESPONSE = "Api returned an unknown status response message while trying to get {0}";
 
 
     public IPApiResponse getIPInfo(String ipAddress) {
@@ -35,7 +34,7 @@ public class IPRestClient {
                 throw new InvalidIPAddressException(MessageFormat.format(INVALID_IP_MSG, ipAddress));
             }
             if(!RESPONSE_SUCCESS.equals(ipApiResponse.getStatus())){
-                throw new IpAPIException(MessageFormat.format(UNKOWN_STATUS_MSG, ipAddress));
+                throw new IpAPIException(MessageFormat.format(UNKNOWN_STATUS_RESPONSE, ipAddress));
             }
         }
         return ipApiResponse;

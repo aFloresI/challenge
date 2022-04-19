@@ -6,6 +6,7 @@ import com.user.registration.challenge.error.InvalidIPAddressException;
 import com.user.registration.challenge.error.InvalidPasswordException;
 import com.user.registration.challenge.error.InvalidRequestException;
 import com.user.registration.challenge.model.RegisterDTO;
+import com.user.registration.challenge.model.RegisterMapper;
 import com.user.registration.challenge.model.RegisterRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -22,22 +23,22 @@ public class RegistrationService {
 
     private static final String WRONG_PARAMS_MSG = "All parameters must not be blank ";
     private static final String INVALID_PWD_MSG= "Password must be at least 8 characters and contain an uppercase letter, a symbol _#$%. and a number";
-    private static final String INVALID_ORIGIN_IP_MSG= "The given IP address is not from Canada";
+    private static final String INVALID_ORIGIN_IP_MSG= "User is not eligible to register";
 
     private static final String COUNTRY_CANADA_STR= "Canada";
 
     @Autowired
     IPRestClient ipRestClient;
 
-
+    @Autowired
+    private RegisterMapper registerMapper;
 
     public RegisterDTO register(RegisterRequest registerRequest) {
 
         validateRegistrationRequest(registerRequest);
         IPApiResponse ipApiResponse=ipRestClient.getIPInfo(registerRequest.getIp());
         validateCanadianIP(ipApiResponse);
-
-        return null;
+        return registerMapper.requestIpToRegisterDTO(registerRequest,ipApiResponse);
     }
 
     private void validateRegistrationRequest(RegisterRequest registerRequest){
@@ -51,8 +52,9 @@ public class RegistrationService {
     }
 
     private void validateCanadianIP(IPApiResponse ipApiResponse){
-        if(COUNTRY_CANADA_STR.equals(ipApiResponse.getCountry())){
+        if(!COUNTRY_CANADA_STR.equals(ipApiResponse.getCountry())){
             throw new InvalidIPAddressException(INVALID_ORIGIN_IP_MSG);
         }
     }
+
 }

@@ -1,9 +1,6 @@
 package com.user.registration.challenge.config;
 
-import com.user.registration.challenge.error.ApiErrorDTO;
-import com.user.registration.challenge.error.InvalidPasswordException;
-import com.user.registration.challenge.error.InvalidRequestException;
-import com.user.registration.challenge.error.IpAPIException;
+import com.user.registration.challenge.error.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +46,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
 
     @ExceptionHandler({
-            IpAPIException.class
+            IpAPIException.class,
+            InvalidIPAddressException.class
     })
     protected ResponseEntity<Object> handleInternalServerErrorException(RuntimeException exception, WebRequest request) {
         return handleExceptionInternal(exception, INTERNAL_SERVER_ERROR, request);
