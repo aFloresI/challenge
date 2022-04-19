@@ -1,0 +1,48 @@
+openapi: 3.0.1
+info:
+  title: Registration API
+  version: 1.0.0
+paths:
+  /register:
+    post:
+      summary: Register a user
+      operationId: register
+      requestBody:
+        description: Register a user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterDTO'
+
+
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        ip:
+          type: string
+    RegisterDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        city:
+          type: string
+        message:
+          type: string
