@@ -1,12 +1,15 @@
-package com.user.registration.challenge.business.config;
+package com.user.registration.challenge.config;
 
-import com.user.registration.challenge.business.web.model.ApiErrorDTO;
+import com.user.registration.challenge.error.ApiErrorDTO;
+import com.user.registration.challenge.error.InvalidPasswordException;
+import com.user.registration.challenge.error.InvalidRequestException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -32,6 +35,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         List<String> validationList = ex.getBindingResult().getFieldErrors().stream().map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage()).collect(Collectors.toList());
 
         return handleExceptionInternal(ex, BAD_REQUEST, request, validationList.toString());
+    }
+
+    @ExceptionHandler({
+            InvalidRequestException.class,
+            InvalidPasswordException.class
+    })
+    protected ResponseEntity<Object> handleBadRequestException(RuntimeException exception, WebRequest request) {
+        return handleExceptionInternal(exception, BAD_REQUEST, request);
     }
 
     private ResponseEntity<Object> handleExceptionInternal(Exception exception, HttpStatus status, WebRequest request) {

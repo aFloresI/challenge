@@ -27,6 +27,10 @@ components:
   schemas:
     RegisterRequest:
       type: object
+      required:
+        - username
+        - password
+        - ip
       properties:
         username:
           type: string

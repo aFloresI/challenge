@@ -1,4 +1,4 @@
-package com.user.registration.challenge.business.web.model;
+package com.user.registration.challenge.error;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
