@@ -9,7 +9,7 @@ import java.util.UUID;
 @Mapper(componentModel = "spring")
 public interface RegisterMapper {
 
-    static final String WELCOME_MSG="Welcome {0} from {1} ";
+    static final String WELCOME_MSG="Welcome {0} from {1}";
     @Mappings({
             @Mapping(source = "request.username",target = "name"),
             @Mapping(expression = "java(setWelcomeMessage(request.getUsername(),ipApiResponse.getCity()))",

@@ -14,8 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.*;
 
 
 @ControllerAdvice
@@ -46,11 +45,17 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
 
     @ExceptionHandler({
-            IpAPIException.class,
-            InvalidIPAddressException.class
+            IpAPIException.class
     })
     protected ResponseEntity<Object> handleInternalServerErrorException(RuntimeException exception, WebRequest request) {
         return handleExceptionInternal(exception, INTERNAL_SERVER_ERROR, request);
+    }
+
+    @ExceptionHandler({
+            InvalidIPAddressException.class
+    })
+    protected ResponseEntity<Object> handleForbiddenException(RuntimeException exception, WebRequest request) {
+        return handleExceptionInternal(exception, FORBIDDEN, request);
     }
 
 
