@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 public class ApiErrorDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
-    private LocalDateTime timestamp = LocalDateTime.now();
-    private HttpStatus status;
-    private String message;
+    private final LocalDateTime timestamp = LocalDateTime.now();
+    private final HttpStatus status;
+    private final String message;
 
     public ApiErrorDTO(HttpStatus status, String message) {
         this.status = status;

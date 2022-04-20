@@ -1,17 +1,13 @@
 package com.user.registration.challenge;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.user.registration.challenge.client.IPRestClient;
 import com.user.registration.challenge.client.model.IPApiResponse;
 import com.user.registration.challenge.model.RegisterDTO;
 import com.user.registration.challenge.model.RegisterMapper;
 import com.user.registration.challenge.model.RegisterRequest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -20,10 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +43,7 @@ class ChallengeApplicationTests {
 	private static final String MEXICO_IP="metro.cdmx.gob.mx";
 	private static final String CANADA_COUNTRY_STR="Canada";
 	private static final String MONTREAL_STR="Montreal";
+	private static final String TORONTO_STR="Toronto";
 
 	@Autowired
 	RegisterMapper registerMapper;
@@ -66,7 +62,7 @@ class ChallengeApplicationTests {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(createRequest(USER_STR,VALID_PWD,CANADA_IP))))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.city").value(MONTREAL_STR));
+				.andExpect(jsonPath("$.city").value(Matchers.anyOf(Matchers.is(MONTREAL_STR),Matchers.is(TORONTO_STR))));
 	}
 
 	@Test
@@ -123,6 +119,5 @@ class ChallengeApplicationTests {
 		assertEquals(registerDTO.getCity(),MONTREAL_STR);
 		assertEquals(registerDTO.getMessage(),"Welcome "+USER_STR+" from " +MONTREAL_STR);
 	}
-
 
 }
